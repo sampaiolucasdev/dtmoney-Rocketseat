@@ -4,6 +4,7 @@ import { Dashboard } from "./components/Dashboard";
 import { Header } from "./components/Header";
 import { NewTransactionModal } from './components/NewTransactionModal';
 import { GlobalStyle } from "./styles/global";
+import { TransactionsProvider } from './hooks/useTransactions';
 
 Modal.setAppElement('#root');
 export function App() { //FRAGMENT (<> </>) É UMA DIV QUE NÃO É REPASSADA AO HTML
@@ -20,7 +21,7 @@ export function App() { //FRAGMENT (<> </>) É UMA DIV QUE NÃO É REPASSADA AO 
   }
 
  return(
-   <>  
+   <TransactionsProvider>  
      <Header onOpenNewTransactionModal={handleOpenNewTransactionModal}/>
         
         
@@ -32,6 +33,6 @@ export function App() { //FRAGMENT (<> </>) É UMA DIV QUE NÃO É REPASSADA AO 
      />
 
      <GlobalStyle />
-   </>
+   </TransactionsProvider>
  )
 }

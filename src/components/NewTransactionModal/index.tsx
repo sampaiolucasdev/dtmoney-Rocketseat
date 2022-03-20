@@ -5,6 +5,7 @@ import closeImg from '../../assets/fechar.svg';
 import incomeImg from '../../assets/entradas.svg';
 import outcomeImg from '../../assets/saidas.svg';
 import { api } from '../../services/api';
+import { useTransactions } from '../../hooks/useTransactions';
 
 
 interface NewTransactionModalProps {
@@ -13,23 +14,28 @@ interface NewTransactionModalProps {
 }
 
 export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModalProps){
+
+    const { createTransaction } = useTransactions();
     
     const [title, setTitle] = useState('');
-    const [value, setValue] = useState(0);
+    const [amount, setAmount] = useState(0);
     const [category, setCategory] = useState('');
     const[type, setType] = useState('deposit')
 
-    function handleCreateNewTransaction(event: FormEvent){
+    async function handleCreateNewTransaction(event: FormEvent){
         event.preventDefault(); //FUNCIONALIDADE DO HTML QUE PREVINE QUE A PÁGINA SEJA RECARREGADA QUANDO HOUVER SUBMIT
 
-        const data = {
-            title,
-            value,
-            category,
-            type
-        };
-        
-        api.post('/transactions', data)
+        await createTransaction({
+           title,
+           amount,
+           category,
+           type, 
+        })
+        setTitle('');
+        setAmount(0);
+        setCategory('');
+        setType('deposit');
+        onRequestClose();
     }
     return(
 
@@ -53,8 +59,8 @@ export function NewTransactionModal({isOpen, onRequestClose}: NewTransactionModa
         <input
             placeholder="Valor"
             type="value"
-            value={value}
-            onChange={event => setValue(Number(event.target.value))} //COMO O event.target.value SÓ RECEBE string, TEM QUE USAR A FUNCIONALIDADE Number PRA CONVERTER
+            value={amount}
+            onChange={event => setAmount(Number(event.target.value))} //COMO O event.target.value SÓ RECEBE string, TEM QUE USAR A FUNCIONALIDADE Number PRA CONVERTER
         >
         </input>
         
